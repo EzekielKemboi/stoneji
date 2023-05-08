@@ -1,0 +1,18 @@
+{
+    "manifest_version": 3,
+    "name": "stoneJi",
+    "version": "0.1.1",
+    "description": "Youtube stone记频道插件，看视频，做笔记！",
+    "content_scripts": [
+      {
+        "js": [
+          "scripts/ui.js",
+          "scripts/stoneji.js"
+        ],
+        "matches": [
+          "https://*.youtube.com/*"
+        ]
+      }
+    ],
+    "author": "kemboi"
+  }
