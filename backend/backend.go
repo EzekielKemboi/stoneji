@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 	"github.com/syndtr/goleveldb/leveldb"
@@ -11,7 +12,8 @@ var db *leveldb.DB
 
 func main() {
 	// 打开数据库
-	db, err := leveldb.OpenFile("./leveldb", nil)
+	var err error
+	db, err = leveldb.OpenFile("./leveldb", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,19 +40,28 @@ func main() {
 }
 
 func getKey(c *gin.Context) {
-	c.String(200, "%s", `{"value":"i love stone"}`)
-	// key := c.PostForm("key")
-	// value, err := db.Get([]byte(key), nil)
-	// if err != nil {
-	// 	c.String(404, "Key not found")
-	// } else {
-	// 	c.String(200, "%s", value)
-	// }
+	key := c.DefaultQuery("key","")
+	if key== ""{
+		c.String(404, "Key empty")
+		return 
+	}
+	log.Printf("%v\n",key)
+	value, err := db.Get([]byte(key), nil)
+	if err != nil {
+		c.String(404, "Key not found")
+	} else {
+		c.String(200, "%s", fmt.Sprintf(`{"value":"%v"}`,string(value)))
+	}
 }
 
 func setKey(c *gin.Context) {
-	key := c.PostForm("key")
-	value := c.PostForm("value")
+	key := c.DefaultQuery("key","")
+	value := c.DefaultQuery("value","")
+	if key== ""{
+		c.String(404, "Key empty")
+		return 
+	}
+	log.Printf("%v %v\n",key,value)
 	err := db.Put([]byte(key), []byte(value), nil)
 	if err != nil {
 		c.String(500, "Internal server error")

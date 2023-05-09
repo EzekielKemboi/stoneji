@@ -6,8 +6,13 @@
     "content_scripts": [
       {
         "js": [
-          "scripts/ui.js",
+          "scripts/api.js",
+          "scripts/cache.js",
+          "scripts/card.js",
           "scripts/stoneji.js"
+        ],
+        "css": [
+          "css/card.css"
         ],
         "matches": [
           "https://*.youtube.com/*"
